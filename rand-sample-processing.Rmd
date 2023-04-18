@@ -9,11 +9,19 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Load packages
+
+```{r}
+if ("rqdatatable" %in% rownames(installed.packages()) == 'FALSE') install.packages("rqdatatable")
+```
+
+
 ## Include packages
 
 ```{r}
 library(tidyverse)
 library(readr)
+library(rqdatatable)
 ```
 
 # Sub-sample selection
@@ -28,37 +36,81 @@ I would like to select a total of 20 samples that meet the following criteria:
 | 4                 | environmental & kbay |
 | 4                 | control & ambient    |
 | 4                 | control & hot        |
-| 4                 | overdose & ambient   |
-| 4                 | overdose & hot       |
+| 4                 | peak & ambient       |
+| 4                 | peak & hot           |
 | Total = 20        |                      |
 
 I will aim to randomize my sample processing within these bounds.
 
-## Load in metadata, peek & clean up
+# Load in metadata
 
 ```{r metadata}
 metadata <- read_csv("data/metadata.csv")
 ```
 
-## Filter data to only the groups of interest (goi)
+# Extraction #1
+set.seed makes output the same when re-run 
+This should result in 20 samples from the environmental group and 40 samples of each treatment group, equaling a total of 100 samples. 
+Now we want to randomly select 2 samples from each of the 5 groups, for a total of 10 samples to process together with a Zymo 10-prep kit.
 ```{r}
-goi <- metadata %>%
-  filter(
-      pae_treatment == "environmental" |
-      pae_treatment == "control" & temp_treatment == "ambient" |
-      pae_treatment == "control" & temp_treatment == "hot" |
-      pae_treatment == "overdose" & temp_treatment == "ambient" |
-      pae_treatment == "overdose" & temp_treatment == "hot" 
-           )
+set.seed(1) 
+extr1 <- 
+  metadata %>%
+   filter(
+      pae_treatment == "environmental" & cryo_rep == "a" |
+      pae_treatment == "control" & temp_treatment == "ambient" & cryo_rep == "a" |
+      pae_treatment == "control" & temp_treatment == "hot" & cryo_rep == "a" |
+      pae_treatment == "peak" & temp_treatment == "ambient" & cryo_rep == "a" |
+      pae_treatment == "peak" & temp_treatment == "hot" & cryo_rep == "a"
+         ) %>% group_by(pae_treatment, temp_treatment) %>% slice_sample(n=2) 
+
+extr1 <- extr1 %>% 
+  mutate(extraction_id = 'extr-1')
+
+print(extr1[ , c("cryo_id","extraction_id")])
 ```
 
-This should result in samples from the 20 environmental group and 40 of each treatment group, equaling a total of 100 samples. 
+These 10 samples are the first that we will process, and will be assigned 'extr1'as their extraction_id.
 
-Now we want to randomly select 4 samples from each of the 5 groups.
+## Add extr-1 to metadata
+Update metadata to reflect this, by renaming 'live_metadata' and joining the 'extr1' tibble to it 
 ```{r}
-set.seed(1) # set.seed(1) makes output the same when re-run 
-prelim20 <- goi %>% group_by(pae_treatment, temp_treatment) %>% slice_sample(n=4)
+live_metadata <- metadata %>% left_join(extr1)
 ```
 
+# Extraction #2
+Now we will randomly select the next batch of 10 samples, excluding the ones we already processed
+```{r}
+set.seed(100)
+extr2 <- 
+  live_metadata %>%
+   filter(
+      extraction_id == NA |
+      pae_treatment == "environmental" & cryo_rep == "a" |
+      pae_treatment == "control" & temp_treatment == "ambient" & cryo_rep == "a" |
+      pae_treatment == "control" & temp_treatment == "hot" & cryo_rep == "a" |
+      pae_treatment == "peak" & temp_treatment == "ambient" & cryo_rep == "a" |
+      pae_treatment == "peak" & temp_treatment == "hot" & cryo_rep == "a"
+         ) %>% group_by(pae_treatment, temp_treatment) %>% slice_sample(n=2) 
+
+extr2 <- extr2 %>% 
+  mutate(extraction_id = 'extr-2')
+
+print(extr2[ , c("cryo_id","extraction_id")])
+```
+## Add extr-2 to live_metadata
+```{r}
+live_metadata <- natural_join(live_metadata, extr2,
+                              by = c('cryo_id', 
+                                     'colony',
+                                     'pae_treatment',
+                                     'temp_treatment',
+                                     'tank',
+                                     'cryo_rep', 
+                                     'pae_ugL',
+                                     'freeze_date',
+                                     'cull_notes'), 
+                              jointype = 'FULL')
+```
 
 
