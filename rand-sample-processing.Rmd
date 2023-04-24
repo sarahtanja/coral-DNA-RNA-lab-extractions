@@ -69,6 +69,30 @@ extr1 <- extr1 %>%
 
 print(extr1[ , c("cryo_id","extraction_id")])
 ```
+```{r}
+set.seed(1) 
+extr1_colony <- metadata %>%
+   filter(
+      between(colony, 1, 4) & pae_treatment == "environmental" & cryo_rep == "a" |
+      between(colony, 1, 4) & pae_treatment == "control" & temp_treatment == "ambient" & cryo_rep == "a"|
+      between(colony, 1, 4) & pae_treatment == "control" & temp_treatment == "hot" & cryo_rep == "a" |
+      between(colony, 1, 4) & pae_treatment == "peak" & temp_treatment == "ambient" & cryo_rep == "a" |
+      between(colony, 1, 4) & pae_treatment == "peak" & temp_treatment == "hot" & cryo_rep == "a"
+         ) %>% group_by(pae_treatment, temp_treatment) %>% slice_sample(n=2) 
+
+extr1_colony <- extr1_colony %>% 
+  mutate(extraction_id = 'extr-1')
+
+print(extr1_colony[ , c("cryo_id","extraction_id")])
+
+write_csv(extr1_colony, "extr1_21APR23.csv")
+
+```
+
+```{r}
+metadata %>%
+   filter(between(colony, 1, 4) & cryo_rep == "a")
+```
 
 These 10 samples are the first that we will process, and will be assigned 'extr1'as their extraction_id.
 

@@ -1,0 +1,69 @@
+---
+title: "Randomize Sample Processing"
+author: "Sarah Tanja"
+date: "4/10/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Include packages
+
+```{r}
+library(tidyverse)
+library(readr)
+```
+
+# Sub-sample selection
+I need to select a sub-sample of 20 from a total of 140 samples, process them, and send them off for sequencing to confirm that it is worthwhile to sequence more using the same protocols. However, I want to make sure that the sub-sample contains a spread of treatments so that I can do a preliminary analysis, and I want to randomize as much as possible to account for batch effects. I have duplicates for each of my 140 samples. I am not concerned about 'using up' a sample. Each sample is split into two 1.5mL cryo-tubes labelled 'a' and 'b' and can be used for other analyses or as technical replicates (meaning there are 280 total frozen cryo-vials to work with).
+
+I've chosen 20 as the sub-sample because the Zymo Quick DNA/RNA Miniprep Plus kit I'm using comes with preps in multiples of 10 (or 50), and the minimum number of samples to run without incurring an additional fee from UT Austin's Genomics center is 20.
+
+I would like to select a total of 20 samples that meet the following criteria:
+
+| number of samples | treatment group      |
+|-------------------|----------------------|
+| 4                 | environmental & kbay |
+| 4                 | control & ambient    |
+| 4                 | control & hot        |
+| 4                 | overdose & ambient   |
+| 4                 | overdose & hot       |
+| Total = 20        |                      |
+
+I will aim to randomize my sample processing within these bounds.
+
+## Load in metadata, peek & clean up
+
+```{r metadata}
+metadata <- read_csv("../data/metadata.csv")
+```
+
+## Filter data to only the groups of interest (goi)
+```{r}
+goi <- metadata %>%
+  filter(
+      pae_treatment == "environmental" |
+      pae_treatment == "control" & temp_treatment == "ambient" |
+      pae_treatment == "control" & temp_treatment == "hot" |
+      pae_treatment == "overdose" & temp_treatment == "ambient" |
+      pae_treatment == "overdose" & temp_treatment == "hot" 
+           )
+```
+
+This should result in samples from the 20 environmental group and 40 of each treatment group, equaling a total of 100 samples. 
+
+Now we want to randomly select 4 samples from each of the 5 groups.
+```{r}
+set.seed(1) # set.seed(1) makes output the same when re-run 
+prelim20 <- goi %>% group_by(pae_treatment, temp_treatment) %>% slice_sample(n=4)
+```
+
+
+We have to process samples in multiples of 10 (since we have the 10-prep Zymo kit), so we will slice the 'prelim20' group again to randomly select 10 samples. 
+```{r}
+set.seed(2) 
+first10 <- prelim20 %>% slice_sample(n=10)
+```
+
