@@ -1,0 +1,7 @@
+"Run ID","Assay Name","Test Name","Test Date","Qubit® tube conc.","Units","Original sample conc.","Units","Sample Volume (µL)","Dilution Factor","Std 1 RFU","Std 2 RFU","Std 3 RFU","Excitation","Emission","Green RFU","Far Red RFU"
+"2023-04-25_133744","RNA Broad range","Sample_#230425-134031","2023/04/25 13:40:31","0.062","µg/mL","12.4","ng/µL","1","200","640.61","17282.71",,"Red","Far Red",,"810.94"
+"2023-04-25_133744","RNA Broad range","Sample_#230425-134011","2023/04/25 13:40:11","0.070","µg/mL","14.0","ng/µL","1","200","640.61","17282.71",,"Red","Far Red",,"837.69"
+"2023-04-25_133744","RNA Broad range","Sample_#230425-133949","2023/04/25 13:39:49","Out of range","µg/mL","Out of range","ng/µL","1","200","640.61","17282.71",,"Red","Far Red",,"737.75"
+"2023-04-25_133744","RNA Broad range","Sample_#230425-133932","2023/04/25 13:39:32","Out of range","µg/mL","Out of range","ng/µL","1","200","640.61","17282.71",,"Red","Far Red",,"730.10"
+"2023-04-25_110503","RNA Broad range","Sample_#230425-114129","2023/04/25 11:41:29","0.062","µg/mL","12.4","ng/µL","1","200","663.13","19026.64",,"Red","Far Red",,"851.16"
+"2023-04-25_110503","RNA Broad range","Sample_#230425-114056","2023/04/25 11:40:56","Out of range","µg/mL","Out of range","ng/µL","1","200","663.13","19026.64",,"Red","Far Red",,"706.01"
