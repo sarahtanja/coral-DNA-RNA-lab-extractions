@@ -1,3 +1,3 @@
-cryo_id,colony,pae_treatment,temp_treatment,tank,cryo_rep,pae_ugL,freeze_date,cull_notes,extraction_id,extr_date,buffer_date,buffer_status,extr_notes,qubit_run_date,qubit_rna_1,qubit_ran_2,qubit_rna_3
+cryo_id,colony,pae_treatment,temp_treatment,tank,cryo_rep,pae_ugL,freeze_date,cull_notes,extraction_id,extr_date,buffer_date,buffer_status,extr_notes,qubit_rna_run_date,qubit_rna_1,qubit_ran_2,qubit_rna_3
 3-CA1a,3,control,ambient,A1,a,0,8/17/2022,NA,extr-1,4/21/2023,4/21/2023,fresh,"pestled 1st, cryo vial still half-full, 300-400uL of sample used",4/25/2023,12.4,14,12.4
-3-Ea,3,environmental,kbay,NA,a,NA,8/5/2022,NA,extr-1,4/21/2023,4/21/2023,fresh,"pestled 2nd, cryo vial empty, 250uL of sample used, while pestling first fragment chunk ejected from the mortar, may be better to use larger mortar to prevent flyaways",4/25/2023,0.0,0,0
+3-Ea,3,environmental,kbay,NA,a,NA,8/5/2022,NA,extr-1,4/21/2023,4/21/2023,fresh,"pestled 2nd, cryo vial empty, 250uL of sample used, while pestling first fragment chunk ejected from the mortar, may be better to use larger mortar to prevent flyaways",4/25/2023,0,0,0
