@@ -45,28 +45,63 @@ extracted <- extracted %>%
 head(extracted)
 ```
 ```{r}
+# create sample data
+df <- data.frame(x = 1:10, y1 = rnorm(10), y2 = rnorm(10, mean = 2), group = c(rep("Group A", 5), rep("Group B", 5)))
+
+# create scatterplot with two y-variables and a group variable
+p <- ggplot(df, aes(x = x)) + 
+  geom_point(aes(y = y1, color = "Group A", shape = "Group A")) +
+  geom_point(aes(y = y2, color = "Group B", shape = "Group B")) +
+  scale_color_manual(values = c("Group A" = "blue", "Group B" = "red")) +
+  scale_shape_manual(values = c("Group A" = 19, "Group B" = 17))
+
+# add second legend
+p <- p + guides(color = guide_legend(title = "Group"), shape = guide_legend(title = "Group"))
+
+# display the plot
+p
+```
+
+
+```{r}
+library(ggplot2)
+
+# create sample data
+df <- data.frame(x = 1:10, y = 1:10, group = c(rep("A", 5), rep("B", 5)), 
+                 shape_group = c(rep("Circles", 5), rep("Triangles", 5)), 
+                 color_group = c(rep("Reds", 5), rep("Blues", 5)))
+
+# create plot with separate color and shape legends
+ggplot(df, aes(x = x, y = y, shape = shape_group, color = color_group)) +
+  geom_point(size = 4) +
+  scale_color_brewer(palette = "Set1", name = "Colors") +
+  scale_shape_manual(name = "Shapes", values = c(0, 2), 
+                      labels = c("Circles", "Triangles"), 
+                      guide = guide_legend(override.aes = list(size = 4)))
 
 ```
 
 ```{r}
 # Create base scatterplot
 rna <- ggplot(data = extracted, aes(x = extraction_id, y = qubit_rna_avg, color = cryo_id)) +
-  geom_point(size = 2) + 
+  geom_point(size = 2, shape = 1) + 
   ylab("RNA Quantity in ug/uL") + 
   geom_hline(yintercept = 20, linetype = "solid", color = "red")
 
 rna
 
 dna <- ggplot(data = extracted, aes(x = extraction_id, y = qubit_dna_avg, color = cryo_id)) +
-  geom_point(size = 2, shape = "triangle") + 
+  geom_point(size = 2, shape = 3) + 
   ylab("DNA Quantity in ug/uL") + 
-  geom_hline(yintercept = 20, linetype = "solid", color = "purple")
+  geom_hline(yintercept = 20, linetype = "solid", color = "red")
 
 dna
 
 rna_dna <- rna +
-  geom_point(data = extracted, aes(x = extraction_id, y = qubit_dna_avg, color = cryo_id), size = 2, shape = 2) +
-  ylab("Nucleotide Quantity in ug/uL")
+  geom_point(data = extracted, aes(x = extraction_id, y = qubit_dna_avg, color = cryo_id), size = 2, shape = 3) +
+  scale_shape_manual(name = "Nucleotides", values = c(0, 2), labels = c("RNA", "DNA")) +
+  ylab("Nucleotide Quantity in ug/uL") + 
+  xlab("Extraction Batch")
  
 
 rna_dna
