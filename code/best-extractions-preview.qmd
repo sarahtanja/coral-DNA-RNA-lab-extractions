@@ -88,24 +88,38 @@ rna <- ggplot(data = extracted, aes(x = extraction_id, y = qubit_rna_avg, color 
   ylab("RNA Quantity in ug/uL") + 
   geom_hline(yintercept = 20, linetype = "solid", color = "red")
 
-rna
+# save the plot as an PNG file
+ggsave("../output/rna.png", plot = rna, width = 8, height = 4, dpi = 600)
 
+# View plot
+rna
+```
+
+```{r}
 dna <- ggplot(data = extracted, aes(x = extraction_id, y = qubit_dna_avg, color = cryo_id)) +
   geom_point(size = 2, shape = 3) + 
   ylab("DNA Quantity in ug/uL") + 
   geom_hline(yintercept = 20, linetype = "solid", color = "red")
 
-dna
+# save the plot as an PNG file
+ggsave("../output/dna.png", plot = dna, width = 8, height = 4, dpi = 600)
 
+# View plot
+dna
+```
+
+```{r}
 rna_dna <- rna +
   geom_point(data = extracted, aes(x = extraction_id, y = qubit_dna_avg, color = cryo_id), size = 2, shape = 3) +
   scale_shape_manual(name = "Nucleotides", values = c(0, 2), labels = c("RNA", "DNA")) +
   ylab("Nucleotide Quantity in ug/uL") + 
   xlab("Extraction Batch")
- 
 
+# save the plot as an PNG file
+ggsave("../output/rna_dna.png", plot = rna_dna, width = 8, height = 4, dpi = 600)
+
+# View plot
 rna_dna
-
 ```
 
 
