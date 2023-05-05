@@ -40,45 +40,14 @@ extracted <- extracted %>%
   mutate(   
     qubit_dna_avg = rowMeans(select(.,qubit_dna_1, qubit_dna_2, qubit_dna_3))) %>%
     relocate(qubit_dna_avg, .after = qubit_dna_3)
-      
-
-head(extracted)
-```
-```{r}
-# create sample data
-df <- data.frame(x = 1:10, y1 = rnorm(10), y2 = rnorm(10, mean = 2), group = c(rep("Group A", 5), rep("Group B", 5)))
-
-# create scatterplot with two y-variables and a group variable
-p <- ggplot(df, aes(x = x)) + 
-  geom_point(aes(y = y1, color = "Group A", shape = "Group A")) +
-  geom_point(aes(y = y2, color = "Group B", shape = "Group B")) +
-  scale_color_manual(values = c("Group A" = "blue", "Group B" = "red")) +
-  scale_shape_manual(values = c("Group A" = 19, "Group B" = 17))
-
-# add second legend
-p <- p + guides(color = guide_legend(title = "Group"), shape = guide_legend(title = "Group"))
-
-# display the plot
-p
 ```
 
-
 ```{r}
-library(ggplot2)
+# subset to review Qubit Scores
+qubit_scores <- extracted  %>%
+  select(cryo_id, qubit_dna_avg, qubit_rna_avg)
 
-# create sample data
-df <- data.frame(x = 1:10, y = 1:10, group = c(rep("A", 5), rep("B", 5)), 
-                 shape_group = c(rep("Circles", 5), rep("Triangles", 5)), 
-                 color_group = c(rep("Reds", 5), rep("Blues", 5)))
-
-# create plot with separate color and shape legends
-ggplot(df, aes(x = x, y = y, shape = shape_group, color = color_group)) +
-  geom_point(size = 4) +
-  scale_color_brewer(palette = "Set1", name = "Colors") +
-  scale_shape_manual(name = "Shapes", values = c(0, 2), 
-                      labels = c("Circles", "Triangles"), 
-                      guide = guide_legend(override.aes = list(size = 4)))
-
+print(qubit_scores)
 ```
 
 ```{r}
@@ -122,5 +91,8 @@ ggsave("../output/rna_dna.png", plot = rna_dna, width = 8, height = 4, dpi = 600
 rna_dna
 ```
 
+```{r}
+
+```
 
 

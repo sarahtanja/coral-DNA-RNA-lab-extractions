@@ -1,0 +1,96 @@
+---
+title: "Sorting Out the Best Extractions"
+format:
+  gfm:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(readr)
+```
+
+```{r}
+extr_meta <- read_csv("../data/extractions_metadata.csv")
+head(extr_meta)
+```
+
+```{r}
+extracted <- extr_meta %>%
+  filter(!is.na(extraction_id))
+head(extracted, 10)
+
+```
+
+```{r}
+# Make RNA average column and move to after 3rd reading `qubit_rna_3`
+extracted <- extracted %>% 
+  mutate(
+    qubit_rna_avg = rowMeans(select(.,qubit_rna_1, qubit_rna_2, qubit_rna_3))) %>%
+    relocate(qubit_rna_avg, .after = qubit_rna_3) 
+
+# Make DNA average column and move to after 3rd reading `qubit_dna_3`   
+extracted <- extracted %>% 
+  mutate(   
+    qubit_dna_avg = rowMeans(select(.,qubit_dna_1, qubit_dna_2, qubit_dna_3))) %>%
+    relocate(qubit_dna_avg, .after = qubit_dna_3)
+```
+
+```{r}
+# subset to review Qubit Scores
+qubit_scores <- extracted  %>%
+  select(cryo_id, qubit_dna_avg, qubit_rna_avg)
+
+print(qubit_scores)
+```
+
+```{r}
+# Create base scatterplot
+rna <- ggplot(data = extracted, aes(x = extraction_id, y = qubit_rna_avg, color = cryo_id)) +
+  geom_point(size = 2, shape = 1) + 
+  ylab("RNA Quantity in ug/uL") + 
+  geom_hline(yintercept = 20, linetype = "solid", color = "red")
+
+# save the plot as an PNG file
+ggsave("../output/rna.png", plot = rna, width = 8, height = 4, dpi = 600)
+
+# View plot
+rna
+```
+
+```{r}
+dna <- ggplot(data = extracted, aes(x = extraction_id, y = qubit_dna_avg, color = cryo_id)) +
+  geom_point(size = 2, shape = 3) + 
+  ylab("DNA Quantity in ug/uL") + 
+  geom_hline(yintercept = 20, linetype = "solid", color = "red")
+
+# save the plot as an PNG file
+ggsave("../output/dna.png", plot = dna, width = 8, height = 4, dpi = 600)
+
+# View plot
+dna
+```
+
+```{r}
+rna_dna <- rna +
+  geom_point(data = extracted, aes(x = extraction_id, y = qubit_dna_avg, color = cryo_id), size = 2, shape = 3) +
+  scale_shape_manual(name = "Nucleotides", values = c(0, 2), labels = c("RNA", "DNA")) +
+  ylab("Nucleotide Quantity in ug/uL") + 
+  xlab("Extraction Batch")
+
+# save the plot as an PNG file
+ggsave("../output/rna_dna.png", plot = rna_dna, width = 8, height = 4, dpi = 600)
+
+# View plot
+rna_dna
+```
+
+```{r}
+
+```
+
