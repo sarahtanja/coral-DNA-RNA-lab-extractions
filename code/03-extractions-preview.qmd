@@ -17,16 +17,20 @@ library(readr)
 
 
 ```{r}
-extr_meta <- read_csv("../data/extractions_metadata.csv")
+extr_meta <- read_csv("../output/extractions_metadata.csv")
 head(extr_meta)
 ```
 
 ```{r}
 extracted <- extr_meta %>%
   filter(!is.na(extraction_id))
-head(extracted, 10)
+head(extracted, 20)
 
 ```
+Qubit RNA BR Assay Kit
+The Qubit RNA BR (Broad-Range) Assay Kit, when used with the Qubit Fluorometer, provides an accurate and selective method for the quantitation of RNA samples.  Depending on sample volume, the assay kit is designed to be accurate for initial RNA sample concentrations of 0.5 to 1,200 ng/µL, providing a detection range of 10−1,200 ng.
+
+** IF RNA QUBIT IS ENTERED AS 1,201 IT WAS TOO HIGH!** 
 
 ```{r}
 # Make RNA average column and move to after 3rd reading `qubit_rna_3`
@@ -91,8 +95,5 @@ ggsave("../output/rna_dna.png", plot = rna_dna, width = 8, height = 4, dpi = 600
 rna_dna
 ```
 
-```{r}
-
-```
 
 

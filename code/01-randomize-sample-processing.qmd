@@ -9,15 +9,13 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Load packages
-
+## Install packages
 ```{r}
 if ("rqdatatable" %in% rownames(installed.packages()) == 'FALSE') install.packages("rqdatatable")
 ```
 
 
 ## Include packages
-
 ```{r}
 library(tidyverse)
 library(readr)
@@ -42,10 +40,14 @@ I would like to select a total of 20 samples that meet the following criteria:
 
 I will aim to randomize my sample processing within these bounds.
 
-# Load in metadata
-
+# Load in extractions metadata
 ```{r metadata}
-metadata <- read_csv("data/experiment_metadata.csv")
+extractions <- read_csv("../output/extractions_metadata.csv")
+```
+
+# Load in experiment metadata
+```{r metadata}
+metadata <- read_csv("../data/experiment_metadata.csv")
 ```
 
 # Extraction #1
@@ -81,11 +83,11 @@ set1 <- metadata %>%
          ) %>% group_by(pae_treatment, temp_treatment) %>% slice_sample(n=2) 
 
 set1 <- set1 %>% 
-  mutate(zymokit_id = '1')
+  mutate(zymokit_id = 1)
 
 print(set1[ , c("cryo_id","zymokit_id")])
 
-write_csv(set1, "output/set1_21APR23.csv")
+write_csv(set1, "../output/set1_21APR23.csv")
 
 ```
 These 10 samples are the first that we will process, and will be assigned as '1', as they are the first batch of 10 samples processed. This batch of 10 is associated with a Zymo kit of 10 preps, but may be spread across multiple days of lab-work. To designate when each sample from the set was extracted, we decided how many samples we could process at a time (sometime 2 samples, sometimes more), and at the lab bench used a random number generator from google chrome (on our smart phones) to pick out which samples to process, and designated an extraction_id (ex1, ex2, ex3, etc.) for each. 
@@ -109,7 +111,7 @@ ex1 <- set1 %>%
 
 print(set1[ , c("cryo_id","zymokit_id")])
 
-write_csv(set1, "output/set1_21APR23.csv")
+write_csv(set1, "../output/set1_21APR23.csv")
 ```
 
 
@@ -126,9 +128,6 @@ ex3
 ex4
 - 1-Ea
 - 2-PA1a
-
-
-
 
 
 # Extraction #2
@@ -173,13 +172,36 @@ set2 <- set2 %>%
 
 print(set2[ , c("cryo_id","zymokit_id")])
 
-
-write_csv(set2, "output/set2_11MAY23.csv")
-
 ```
 
 ```{r}
+print_set2 <- set2 %>% 
+  mutate(extraction_id = NA,
+         extr_date = NA,
+         qubit_rna_run_date = NA, 
+         qubit_rna_1 = NA, 
+         qubit_rna_2 = NA, 
+         qubit_rna_3 = NA, 
+         qubit_dna_run_date = NA, 
+         qubit_dna_1 = NA, 
+         qubit_dna_2 = NA, 
+         qubit_dna_3 = NA) %>% 
+  select(-2:-9)
 
+write_csv(print_set2, "../output/set2_11MAY23.csv", na = ' ')
+
+```
+Check that set1 and set2 have no overlapping cryo_id's
+```{r}
+# Are there no cryo_id values in set1 (!) that match cryo_id values in set2?
+!set1$cryo_id %in% set2$cryo_id
+# Answer for all should be TRUE
+
+```
+
+
+```{r}
+live_metadata <- live_metadata %>% left_join(set2)
 ```
 
 ## Add Sst2 to live_metadata

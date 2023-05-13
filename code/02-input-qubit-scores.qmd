@@ -1,0 +1,48 @@
+---
+title: "input-qubit-scores"
+format:
+  gfm:
+    toc: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Install packages
+
+
+## Include packages
+```{r}
+library(tidyverse)
+library(readr)
+library(rqdatatable)
+```
+
+## Load extractions_metadata
+```{r}
+extractions <- read_csv("../output/extractions_metadata.csv")
+head(extractions)
+```
+
+
+## ex1
+
+## ex2
+
+## ex3
+
+## ex4
+
+## ex5
+```{r}
+# Fill the empty cells with specific values using mutate() and if_else()
+extractions <- extractions %>% 
+  mutate(A = if_else(is.na(A), 0, A),
+         B = if_else(is.na(B), 10, B))
+
+# Display the modified data frame
+df
+
+
+```

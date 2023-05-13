@@ -1,0 +1,11 @@
+cryo_id,colony,pae_treatment,temp_treatment,tank,cryo_rep,pae_ugL,freeze_date,cull_notes,zymokit_id
+1-CA2a,1,control,ambient,A2,a,0,8/17/2022,NA,1
+3-CA1a,3,control,ambient,A1,a,0,8/17/2022,NA,1
+1-CH2a,1,control,hot,H2,a,0,8/17/2022,NA,1
+2-CH1a,2,control,hot,H1,a,0,8/17/2022,NA,1
+1-Ea,1,environmental,kbay,na,a,na,8/5/2022,NA,1
+3-Ea,3,environmental,kbay,na,a,na,8/5/2022,NA,1
+3-PA1a,3,peak,ambient,A1,a,150,8/17/2022,NA,1
+2-PA1a,2,peak,ambient,A1,a,150,8/17/2022,NA,1
+2-PH2a,2,peak,hot,H2,a,150,8/17/2022,NA,1
+3-PH1a,3,peak,hot,H1,a,150,8/17/2022,NA,1
