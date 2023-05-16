@@ -1,0 +1,90 @@
+---
+title: "03-normalizing"
+author: "Sarah Tanja"
+format:
+  gfm:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Include packages
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(readr)
+```
+
+## Load in data
+
+```{r}
+extracted <- read_csv("../output/extracted.csv")
+head(extracted)
+```
+
+## Normalizing
+
+-   RNA quantity has to be normalized to 25ng/uL and sent in a volume of 25uL in a 96-well PCR plate (or 1.5mL tubes)
+-   DNA quantity has to be normalized to 20ng/uL and sent in a volume of 30uL in a 96-well PCR plate (or )
+
+In order to do this we have to dilute quantities above 20ng/uL $$
+C1V1 = C2V2
+$$ We know $C1$ and we know what we need to turn it into $C2$ and $V2$, so we can solve for $V1$, which is the amount of eluted sample we will need. We can then find the amount of DNase/Rnase free water we need to add to the subsample volume by $V2 - V1$.
+
+For an RNA sample where the average qubit score is 640.6... $$
+C1*V1 = C2*V2 \\
+where \; C1 = 640.6 ng/ \mu L \\
+640.6ng/ \mu L *V1 = 25ng/ \mu L * 25 \mu L \\
+V1 =  \frac{25ng/ \mu L * 25 \mu L}{640.6ng/ \mu L} \\
+V1 = \frac{625}{640.6} \mu L \\
+V1 = 0.97 \mu L
+$$ This means we have to take just $0.97 \mu L$ of eluted RNA and dilute it in $25 \mu L - 0.97 \mu L = 24.03 \mu L$ of nuclease-free water to get an RNA concentration of $25 ng /\mu L$ in a $25 \mu L$ volume.
+
+Let's write a code that calculates the volume for us
+
+```{r}
+# final normalized rna quantity (C2) needed in nanograms per microliter (ng/uL) 
+norm_rna_ngul <- 25
+# final rna volume (V2) needed in microliters (uL)
+norm_rna_ul <- 25
+```
+
+```{r}
+(norm_rna_ngul*norm_rna_ul)/extracted$qubit_rna_avg
+```
+
+```{r}
+# final normalized rna quantity (C2) needed in nanograms per microliter (ng/uL) 
+norm_rna_ngul <- 25
+# final rna volume (V2) needed in microliters (uL)
+norm_rna_ul <- 25
+# Make RNA average column and move to after 3rd reading `qubit_rna_3`
+extracted <- extracted %>% 
+  mutate(
+    norm_eluted_rna_volume_uL = (norm_rna_ngul*norm_rna_ul)/extracted$qubit_rna_avg ) %>%
+    relocate(norm_eluted_rna_volume_uL, .after = qubit_rna_avg) 
+```
+
+Gotta put parameters on this.. 
+- if qubit RNA avereage ng/uL is less than 25 we have to filter that out and just put 'NA' 
+- if normalized eluted volume is less than $1 \mu L$ we have to somehow flag that for serial dilution
+chatgpt say: 
+You can use the mutate() function in R from the dplyr package to conditionally apply math operators and assign 'NA' to a new column based on a condition. Here's an example:
+library(dplyr)
+
+# Create a sample data frame
+df <- data.frame(existing_column = c(30, 20, 40))
+
+# Mutate a new column based on condition
+df <- mutate(df, new_column = ifelse(existing_column >= 25, existing_column * 2, NA))
+
+# Print the updated data frame
+print(df)
+
+
+This is a problem! We can't pipette that small... our pipette only goes down to $1 \mu L$! For some of the samples we will have to do a serial dilution...
+
+All DNA and RNA samples have at least $48 \mu L$ of eluted volume to work with.
