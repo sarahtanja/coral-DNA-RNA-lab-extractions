@@ -38,20 +38,28 @@ extracted <- extracted %>%
     qubit_rna_avg = rowMeans(select(.,qubit_rna_1, qubit_rna_2, qubit_rna_3))) %>%
     relocate(qubit_rna_avg, .after = qubit_rna_3) 
 
-# Make DNA average column and move to after 3rd reading `qubit_dna_3`   
+# Make DNA average column and move to after 3rd reading `qubit_dna_3`
 extracted <- extracted %>% 
   mutate(   
     qubit_dna_avg = rowMeans(select(.,qubit_dna_1, qubit_dna_2, qubit_dna_3))) %>%
     relocate(qubit_dna_avg, .after = qubit_dna_3)
 
+# Make a slimmed-down version 
+columns <- c("cryo_id", "extraction_id", "qubit_rna_avg", "qubit_dna_avg")
+
+extracted_slim <- extracted %>% 
+  select(all_of(columns))
+
 # Save this as a running list of extracted samples
 write_csv(extracted, "../output/extracted.csv")
+write_csv(extracted_slim, "../output/extracted_slim.csv")
 ```
 
 ```{r}
 # subset to review Qubit Scores
 qubit_scores <- extracted  %>%
-  select(cryo_id, qubit_dna_avg, qubit_rna_avg)
+  select(cryo_id, extraction_id, qubit_dna_avg, qubit_rna_avg) %>% 
+  arrange(extraction_id)
 
 print(qubit_scores)
 ```

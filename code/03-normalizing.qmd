@@ -21,8 +21,8 @@ library(readr)
 ## Load in data
 
 ```{r}
-extracted <- read_csv("../output/extracted.csv")
-head(extracted)
+extracted_slim <- read_csv("../output/extracted_slim.csv")
+head(extracted_slim)
 ```
 
 ## Normalizing
@@ -43,47 +43,64 @@ V1 = \frac{625}{640.6} \mu L \\
 V1 = 0.97 \mu L
 $$ This means we have to take just $0.97 \mu L$ of eluted RNA and dilute it in $25 \mu L - 0.97 \mu L = 24.03 \mu L$ of nuclease-free water to get an RNA concentration of $25 ng /\mu L$ in a $25 \mu L$ volume.
 
-Let's write a code that calculates the volume for us
+Let's write a code that calculates the volume for us For RNA
 
 ```{r}
-# final normalized rna quantity (C2) needed in nanograms per microliter (ng/uL) 
+# final normalized rna concentration (C2) needed in nanograms per microliter (ng/uL) 
 norm_rna_ngul <- 25
+
 # final rna volume (V2) needed in microliters (uL)
-norm_rna_ul <- 25
+# final vol should be 25, but adding a 10uL buffer for qubit and pipetting error
+norm_rna_ul <- 35
+
+# Use mutate to create a new column and calculate the volume of eluted RNA in uL needed to normalize RNA concentration to 25ng/uL
+extracted_norm <- extracted_slim %>% 
+  mutate(rna_elut_vol_norm = round((norm_rna_ngul*norm_rna_ul)/extracted$qubit_rna_avg), digits = 0) %>%
+    relocate(rna_elut_vol_norm, .after = qubit_rna_avg)
+
+# Use mutate to create a new column that calculates the volume of nuclease free water needed to add to the eluted RNA to normalize RNA concentration to 25ng/uL in a 25uL volume
+extracted_norm <- extracted_norm %>% 
+  mutate(rna_nucfreewater_vol_norm = (norm_rna_ul - rna_elut_vol_norm)) %>%
+    relocate(rna_nucfreewater_vol_norm, .after = rna_elut_vol_norm )
+
 ```
+
+For DNA
 
 ```{r}
-(norm_rna_ngul*norm_rna_ul)/extracted$qubit_rna_avg
+# final normalized dna concentration (C2) needed in nanograms per microliter (ng/uL) 
+norm_dna_ngul <- 20
+
+# final dna volume (V2) needed in microliters (uL)
+# final vol should be 30, but adding a 10uL buffer for qubit and pipetting error
+norm_dna_ul <- 40
+
+# Use mutate to create a new column and calculate the volume of eluted RNA in uL needed to normalize RNA concentration to 25ng/uL
+# add but if volume is greater than 50 or less than zero is.na
+extracted_norm <- extracted_norm %>% 
+  mutate(dna_elut_vol_norm = round((norm_dna_ngul*norm_dna_ul)/extracted$qubit_dna_avg), digits = 0) %>%
+    relocate(dna_elut_vol_norm, .after = qubit_dna_avg)
+
+# Use mutate to create a new column that calculates the volume of nuclease free water needed to add to the eluted RNA to normalize RNA concentration to 25ng/uL in a 25uL volume
+extracted_norm <- extracted_norm %>% 
+  mutate(dna_nucfreewater_vol_norm = (norm_dna_ul - dna_elut_vol_norm)) %>%
+    relocate(dna_nucfreewater_vol_norm, .after = dna_elut_vol_norm )
+
 ```
 
-```{r}
-# final normalized rna quantity (C2) needed in nanograms per microliter (ng/uL) 
-norm_rna_ngul <- 25
-# final rna volume (V2) needed in microliters (uL)
-norm_rna_ul <- 25
-# Make RNA average column and move to after 3rd reading `qubit_rna_3`
-extracted <- extracted %>% 
-  mutate(
-    norm_eluted_rna_volume_uL = (norm_rna_ngul*norm_rna_ul)/extracted$qubit_rna_avg ) %>%
-    relocate(norm_eluted_rna_volume_uL, .after = qubit_rna_avg) 
-```
-
-Gotta put parameters on this.. 
-- if qubit RNA avereage ng/uL is less than 25 we have to filter that out and just put 'NA' 
-- if normalized eluted volume is less than $1 \mu L$ we have to somehow flag that for serial dilution
-chatgpt say: 
-You can use the mutate() function in R from the dplyr package to conditionally apply math operators and assign 'NA' to a new column based on a condition. Here's an example:
-library(dplyr)
+Gotta put parameters on this.. - if qubit RNA avereage ng/uL is less than 25 we have to filter that out and just put 'NA' - if normalized eluted volume is less than $1 \mu L$ we have to somehow flag that for serial dilution chatgpt say: You can use the mutate() function in R from the dplyr package to conditionally apply math operators and assign 'NA' to a new column based on a condition. Here's an example: library(dplyr)
 
 # Create a sample data frame
-df <- data.frame(existing_column = c(30, 20, 40))
+
+df \<- data.frame(existing_column = c(30, 20, 40))
 
 # Mutate a new column based on condition
-df <- mutate(df, new_column = ifelse(existing_column >= 25, existing_column * 2, NA))
+
+df \<- mutate(df, new_column = ifelse(existing_column \>= 25, existing_column \* 2, NA))
 
 # Print the updated data frame
-print(df)
 
+print(df)
 
 This is a problem! We can't pipette that small... our pipette only goes down to $1 \mu L$! For some of the samples we will have to do a serial dilution...
 
