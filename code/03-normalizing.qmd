@@ -21,8 +21,23 @@ library(readr)
 ## Load in data
 
 ```{r}
+# Import data 
 extracted_slim <- read_csv("../output/extracted_slim.csv")
-head(extracted_slim)
+
+
+extracted_slim <- extracted_slim %>% 
+  mutate(qubit_rna_avg = round(qubit_rna_avg, digits = 2)) %>% 
+  mutate(qubit_dna_avg = round(qubit_dna_avg, digits = 2))
+
+str(extracted_slim)
+```
+## Make new dataframes separately for DNA and RNA
+```{r}
+extracted_rna <- extracted_slim %>% 
+    select(-qubit_dna_avg)
+
+extracted_dna <- extracted_slim %>% 
+    select(-qubit_rna_avg)
 ```
 
 ## Normalizing
@@ -43,26 +58,48 @@ V1 = \frac{625}{640.6} \mu L \\
 V1 = 0.97 \mu L
 $$ This means we have to take just $0.97 \mu L$ of eluted RNA and dilute it in $25 \mu L - 0.97 \mu L = 24.03 \mu L$ of nuclease-free water to get an RNA concentration of $25 ng /\mu L$ in a $25 \mu L$ volume.
 
-Let's write a code that calculates the volume for us For RNA
-
+Let's write a code that calculates the volumes needed for us
+### RNA
 ```{r}
 # final normalized rna concentration (C2) needed in nanograms per microliter (ng/uL) 
-norm_rna_ngul <- 25
+C1rna <- 25
 
 # final rna volume (V2) needed in microliters (uL)
 # final vol should be 25, but adding a 10uL buffer for qubit and pipetting error
-norm_rna_ul <- 35
+V2rna <- 55
 
-# Use mutate to create a new column and calculate the volume of eluted RNA in uL needed to normalize RNA concentration to 25ng/uL
-extracted_norm <- extracted_slim %>% 
-  mutate(rna_elut_vol_norm = round((norm_rna_ngul*norm_rna_ul)/extracted$qubit_rna_avg), digits = 0) %>%
-    relocate(rna_elut_vol_norm, .after = qubit_rna_avg)
+# Use mutate to create a new column and calculate the volume of eluted RNA in uL (V1) needed to normalize RNA concentration to 25ng/uL. If starting concentration is less than 25, make output 'NA'.
+extracted_rna <- extracted_rna %>%
+  mutate(rna_elut_vol_norm = ifelse(
+    qubit_rna_avg < 25,
+    NA,
+    round((C1rna * V2rna) / qubit_rna_avg, digits = 0)
+  )) %>%
+  relocate(rna_elut_vol_norm, .after = qubit_rna_avg)
+
+
 
 # Use mutate to create a new column that calculates the volume of nuclease free water needed to add to the eluted RNA to normalize RNA concentration to 25ng/uL in a 25uL volume
-extracted_norm <- extracted_norm %>% 
-  mutate(rna_nucfreewater_vol_norm = (norm_rna_ul - rna_elut_vol_norm)) %>%
-    relocate(rna_nucfreewater_vol_norm, .after = rna_elut_vol_norm )
+extracted_rna <- extracted_rna %>%
+  mutate(rna_nucfreewater_vol_norm = (V2rna - rna_elut_vol_norm)) %>%
+  relocate(rna_nucfreewater_vol_norm, .after = rna_elut_vol_norm)
 
+# Confirm final volume 
+extracted_rna <- extracted_rna %>% 
+  mutate(diluted_vol = rna_elut_vol_norm + rna_nucfreewater_vol_norm)
+
+# Confirm final concentration (C2, diluted_nguL) ... should all be 25ng/uL
+
+# C1*V1/V2 = C2
+
+# C1 is qubit_rna_avg
+# V1 is rna_elut_vol_norm
+# V2 is V2rna
+
+extracted_rna <- extracted_rna %>% 
+  mutate(calc_norm_nguL = round((qubit_rna_avg * rna_elut_vol_norm) / V2rna, digits = 1))
+
+write_csv(extracted_rna, "../output/extracted_rna_norm.csv")
 ```
 
 For DNA
