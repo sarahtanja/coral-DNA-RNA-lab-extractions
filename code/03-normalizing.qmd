@@ -10,12 +10,19 @@ format:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Include packages
+## Install Packages
+```{r}
+install.packages('DT')
+```
+
+
+## Load Packages
 
 ```{r}
 library(tidyverse)
 library(ggplot2)
 library(readr)
+library(DT)
 ```
 
 ## Load in data
@@ -24,15 +31,14 @@ library(readr)
 # Import data 
 extracted_slim <- read_csv("../output/extracted_slim.csv")
 
-
 extracted_slim <- extracted_slim %>% 
   mutate(qubit_rna_avg = round(qubit_rna_avg, digits = 2)) %>% 
   mutate(qubit_dna_avg = round(qubit_dna_avg, digits = 2))
 
-str(extracted_slim)
+datatable(extracted_slim)
 ```
 
-## Make new dataframes separately for DNA and RNA
+#### Make DNA and RNA dataframes
 
 ```{r}
 extracted_rna <- extracted_slim %>% 
@@ -44,48 +50,139 @@ extracted_dna <- extracted_slim %>%
 
 ## Normalizing
 
--   RNA quantity has to be normalized to 25ng/uL and sent in a volume of 25uL in a 96-well PCR plate (or 1.5mL tubes)
--   DNA quantity has to be normalized to 20ng/uL and sent in a volume of 30uL in a 96-well PCR plate (or )
+-   RNA quantity has to be normalized to $25ng/\mu L$ and sent in a volume of 25uL in a 96-well PCR plate (or 1.5mL tubes)
+-   DNA quantity has to be normalized to $20ng/\mu L$ and sent in a volume of 30uL in a 96-well PCR plate (or )
 
-In order to do this we have to dilute quantities above 20ng/uL $$
-C1V1 = C2V2
-$$ We know $C1$ and we know what we need to turn it into $C2$ and $V2$, so we can solve for $V1$, which is the amount of eluted sample we will need. We can then find the amount of DNase/Rnase free water we need to add to the subsample volume by $V2 - V1$.
+In order to do this we have to dilute! 
+Enter the handy $C1*V1 = C2*V2$ concentration-volume relationship (dilution) equation!
 
-For an RNA sample where the average qubit score is 640.6... $$
+Knowns:
+- $C1$ is the average qubit score
+- $V1 = 5\mu L$ (a small but reasonably accurate volume to pipette from our eluted sample to dilute in nuclease-free water)
+- $C2 = 25ng/\mu L$ for RNA
+- $C2 = 20ng/\mu L$ for DNA
+
+Here, we need to solve for $V2$, which is the total end volume for the dilution.
+The amount of DNase/Rnase free water we need will be $V2 - V1$, with $V1 = 5\mu L$.
+
+Solving for V2 (the volume of nuclease-free water)
+$$
 C1*V1 = C2*V2 \\
-where \; C1 = 640.6 ng/ \mu L \\
-640.6ng/ \mu L *V1 = 25ng/ \mu L * 25 \mu L \\
-V1 =  \frac{25ng/ \mu L * 25 \mu L}{640.6ng/ \mu L} \\
-V1 = \frac{625}{640.6} \mu L \\
-V1 = 0.97 \mu L
-$$ This means we have to take just $0.97 \mu L$ of eluted RNA and dilute it in $25 \mu L - 0.97 \mu L = 24.03 \mu L$ of nuclease-free water to get an RNA concentration of $25 ng /\mu L$ in a $25 \mu L$ volume.
+$$
 
-Let's write a code that calculates the volumes needed for us
+$$
+\frac{C1*V1}{C2} = V2 \\
+$$ 
+
+Let's write a function that calculates the volumes needed for us for each of our eluted samples
+
+```{r}
+dilute <- function(C1, C2) {
+  # Initialize variables
+  n <- length(C1)
+  C1 <- C1
+  V1 <- numeric(n)  # Initialize V1 vector
+  V2 <- numeric(n)  # Initialize V2 vector
+  
+  # Loop through rows
+  for (i in seq_along(C1)) {
+    # Check for missing or invalid data
+    if (C1[i] <= 0) {
+      cat("Skipping row ", i, ": Invalid data\n")
+      next
+    }
+    
+    # Initialize V1 and V2 for the current row
+    V1_row <- 1
+    V2_row <- (C1[i] * V1_row) / C2
+    
+    # Loop until conditions are satisfied
+    while (!is.na(V1_row) && !is.na(V2_row) && (V1_row < 1 || V2_row < 50)) {
+      V1_row <- V1_row + 1
+      V2_row <- (C1[i] * V1_row) / C2
+      
+      # Break the loop if V1 exceeds a threshold value
+      if(V1_row > 49) {
+        cat("Skipping row ", i, ": No valid solution found\n")
+        next
+      }
+    }
+    
+    # Store optimized V1 and V2 values in the corresponding vectors
+    V1[i] <- V1_row
+    V2[i] <- V2_row
+  }
+  
+# Create a data frame with C1 column
+  result <- data.frame(C1 = C1)
+
+# Add V1 and V2 columns to the result data frame
+  result$V1 <- V1
+  result$V2 <- V2
+  result$C2 <- C1*V1/V2
+
+  return(result)
+}
+```
 
 ### RNA
 
+Use the `dilute` function, which has an output of a new dataframe
 ```{r}
-# final normalized rna concentration (C2) needed in nanograms per microliter (ng/uL) 
-C1rna <- 25
+rna_dilution <- dilute(C1 = extracted_rna$qubit_rna_avg, C2 = 26)
+datatable(rna_dilution)
+```
 
-# final rna volume (V2) needed in microliters (uL)
-# final vol should be 25, but adding a 10uL buffer for qubit and pipetting error
-V2rna <- 55
+Join the rna_dilution to the extracted_rna dataframe
+Where qubit_rna_avg = C1
+```{r}
+# rename qubit_rna_avg to C1 for the merge
+diluted_rna <- extracted_rna %>%
+  mutate(C1 = qubit_rna_avg) 
 
-# Use mutate to create a new column and calculate the volume of eluted RNA in uL (V1) needed to normalize RNA concentration to 25ng/uL. If starting concentration is less than 25, make output 'NA'.
+diluted_rna <- merge(diluted_rna, rna_dilution, by = 'C1' ) %>% 
+  relocate(C1, .after = qubit_rna_avg)
+
+diluted_rna <- diluted_rna %>% 
+  mutate(V1_minus_V2 = round(V2 - V1, digits = 0)) %>% 
+  relocate(V1_minus_V2, .after = V1)
+
+datatable(diluted_rna)
+```
+Confirm 
+Where:
+V1 = eluted rna volume $\mu L$
+
+V2 = final volume $\mu L$
+C2 = calculated final concentration $ug \mu L$
+C2_qubit = qubit tested final concentration $ug \mu L$
+
+```{r}
+
+```
+
+
+```{r}
+
+# Add volume of eluted RNA to use from each sample for dilution as a new column
 extracted_rna <- extracted_rna %>%
-  mutate(rna_elut_vol_norm = ifelse(
+  mutate(V1_rna_vol_uL = V1rna) %>% 
+  relocate(V1_rna_vol_uL, .after = qubit_rna_avg)
+
+# Use mutate to create a new column and calculate the final volume of eluted RNA in uL (V2) needed to normalize RNA concentration to 25ng/uL. If starting concentration is less than 25, make output 'NA'.
+extracted_rna <- extracted_rna %>%
+  mutate(V2_rna_vol_uL = ifelse(
     qubit_rna_avg < 25,
     NA,
-    round((C1rna * V2rna) / qubit_rna_avg, digits = 0)
+    round((qubit_rna_avg * V1_rna_vol_uL) / C2rna, digits = 0)
   )) %>%
-  relocate(rna_elut_vol_norm, .after = qubit_rna_avg)
+  relocate(V2_rna_vol_uL, .after = V1_rna_vol_uL)
 
-
-# Use mutate to create a new column that calculates the volume of nuclease free water needed to add to the eluted RNA to normalize RNA concentration to 25ng/uL in a 25uL volume
+# Use mutate to create a new column that calculates the volume of nuclease free water needed to add to the eluted RNA (V1) to normalize RNA concentration to 25ng/uL 
 extracted_rna <- extracted_rna %>%
-  mutate(rna_nucfreewater_vol_norm = (V2rna - rna_elut_vol_norm)) %>%
-  relocate(rna_nucfreewater_vol_norm, .after = rna_elut_vol_norm)
+  mutate(rna_nucfreewater_vol_uL = (V2_rna_vol_uL - V1_rna_vol_uL)) %>%
+  relocate(rna_nucfreewater_vol_uL, .after = V1_rna_vol_uL)
+```
 
 # Confirm final volume 
 extracted_rna <- extracted_rna %>% 
