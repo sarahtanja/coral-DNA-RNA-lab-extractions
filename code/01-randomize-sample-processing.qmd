@@ -3,6 +3,9 @@ title: "Randomize Sample Processing"
 author: "Sarah Tanja"
 date: "4/10/2023"
 output: html_document
+editor: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
@@ -10,12 +13,13 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Install packages
+
 ```{r}
 if ("rqdatatable" %in% rownames(installed.packages()) == 'FALSE') install.packages("rqdatatable")
 ```
 
-
 ## Include packages
+
 ```{r}
 library(tidyverse)
 library(readr)
@@ -23,11 +27,25 @@ library(rqdatatable)
 ```
 
 # Sub-sample selection
-I need to select a sub-sample of 20 from a total of 140 samples, process them, and send them off for sequencing to confirm that it is worthwhile to sequence more using the same protocols. However, I want to make sure that the sub-sample contains a spread of treatments so that I can do a preliminary analysis, and I want to randomize as much as possible to account for batch effects. I have duplicates for each of my 140 samples. I am not concerned about 'using up' a sample. Each sample is split into two 1.5mL cryo-tubes labelled 'a' and 'b' and can be used for other analyses or as technical replicates (meaning there are 280 total frozen cryo-vials to work with).
 
-I've chosen 20 as the sub-sample because the Zymo Quick DNA/RNA Miniprep Plus kit I'm using comes with preps in multiples of 10 (or 50), and the minimum number of samples to run without incurring an additional fee from UT Austin's Genomics center is 20.
+I need to select a sub-sample of 20 from a total of 140 samples, process
+them, and send them off for sequencing to confirm that it is worthwhile
+to sequence more using the same protocols. However, I want to make sure
+that the sub-sample contains a spread of treatments so that I can do a
+preliminary analysis, and I want to randomize as much as possible to
+account for batch effects. I have duplicates for each of my 140 samples.
+I am not concerned about 'using up' a sample. Each sample is split into
+two 1.5mL cryo-tubes labelled 'a' and 'b' and can be used for other
+analyses or as technical replicates (meaning there are 280 total frozen
+cryo-vials to work with).
 
-I would like to select a total of 20 samples that meet the following criteria:
+I've chosen 20 as the sub-sample because the Zymo Quick DNA/RNA Miniprep
+Plus kit I'm using comes with preps in multiples of 10 (or 50), and the
+minimum number of samples to run without incurring an additional fee
+from UT Austin's Genomics center is 20.
+
+I would like to select a total of 20 samples that meet the following
+criteria:
 
 | number of samples | treatment group      |
 |-------------------|----------------------|
@@ -41,19 +59,25 @@ I would like to select a total of 20 samples that meet the following criteria:
 I will aim to randomize my sample processing within these bounds.
 
 # Load in extractions metadata
+
 ```{r metadata}
 extractions <- read_csv("../output/extractions_metadata.csv")
 ```
 
 # Load in experiment metadata
+
 ```{r metadata}
 metadata <- read_csv("../data/experiment_metadata.csv")
 ```
 
-# Extraction #1
-set.seed makes output the same when re-run 
-This should result in 20 samples from the environmental group and 40 samples of each treatment group, equaling a total of 100 samples. 
-We want to randomly select 2 samples from each of the 5 groups, for a total of 10 samples to process together with a Zymo 10-prep kit.
+# Zymo Quick DNA/RNA Miniprep Kit #1
+
+set.seed makes output the same when re-run This should result in 20
+samples from the environmental group and 40 samples of each treatment
+group, equaling a total of 100 samples. We want to randomly select 2
+samples from each of the 5 groups, for a total of 10 samples to process
+together with a Zymo 10-prep kit.
+
 ```{r}
 set.seed(1) 
 extr1 <- 
@@ -71,6 +95,7 @@ extr1 <- extr1 %>%
 
 print(extr1[ , c("cryo_id","zymo_kit_set")])
 ```
+Now we specify we want to sample 2 from each treatment group only between colony 1 and 4
 ```{r}
 set.seed(1) 
 set1 <- metadata %>%
@@ -90,21 +115,44 @@ print(set1[ , c("cryo_id","zymokit_id")])
 write_csv(set1, "../output/set1_21APR23.csv")
 
 ```
-These 10 samples are the first that we will process, and will be assigned as '1', as they are the first batch of 10 samples processed. This batch of 10 is associated with a Zymo kit of 10 preps, but may be spread across multiple days of lab-work. To designate when each sample from the set was extracted, we decided how many samples we could process at a time (sometime 2 samples, sometimes more), and at the lab bench used a random number generator from google chrome (on our smart phones) to pick out which samples to process, and designated an extraction_id (ex1, ex2, ex3, etc.) for each. 
+
+These 10 samples are the first that we will process, and will be
+assigned zymokit_id '1', as they are the first batch of 10 samples processed.
+This batch of 10 is associated with a Zymo kit of 10 preps, but may be
+spread across multiple days of lab-work. To designate when each sample
+from the set was extracted, we decided how many samples we could process
+at a time (sometime 2 samples, sometimes more), and at the lab bench
+used a random number generator from google chrome (on our smart phones)
+to pick out which samples to process, and designated an extraction_id
+(ex1, ex2, ex3, etc.) for each.
 
 ## Add zymokit_id to metadata and rename it live_metadata
-Update metadata to reflect this, by renaming 'live_metadata' and joining the 'set1' tibble to it 
+
+Update metadata to reflect this, by renaming 'live_metadata' and joining
+the 'set1' tibble to it
+
 ```{r}
 live_metadata <- metadata %>% left_join(set1)
 ```
 
 Set1 was broken up into the following extractions:
 
-ex1
-- 3-Ea
-- 3-CA1a
+## ex1 : 3-Ea, 3-CA1a
+
+## ex2
+
+## ex3
+
+ex4
+
+ex5
+
+ex6
+
+ex7
 
 ## Figure out how to append extraction_id to the metadata in R
+
 ```{r}
 ex1 <- set1 %>% 
   mutate(extraction_id = '1')
@@ -114,24 +162,17 @@ print(set1[ , c("cryo_id","zymokit_id")])
 write_csv(set1, "../output/set1_21APR23.csv")
 ```
 
+ex2 - 2-CH1a - 2-PH2a
 
-ex2
-- 2-CH1a
-- 2-PH2a
+ex3 - 1-CA2a - 1-CH2a - 3-PA1a - 3-PH1a
 
-ex3
-- 1-CA2a
-- 1-CH2a
-- 3-PA1a
-- 3-PH1a
+ex4 - 1-Ea - 2-PA1a
 
-ex4
-- 1-Ea
-- 2-PA1a
+# Zymo Quick DNA/RNA Miniprep Kit #2
 
+Now we will randomly select the next batch of 10 samples, excluding the
+ones we already processed
 
-# Extraction #2
-Now we will randomly select the next batch of 10 samples, excluding the ones we already processed
 ```{r}
 set.seed(2)
 set2 <- 
@@ -191,7 +232,9 @@ print_set2 <- set2 %>%
 write_csv(print_set2, "../output/set2_11MAY23.csv", na = ' ')
 
 ```
+
 Check that set1 and set2 have no overlapping cryo_id's
+
 ```{r}
 # Are there no cryo_id values in set1 (!) that match cryo_id values in set2?
 !set1$cryo_id %in% set2$cryo_id
@@ -199,12 +242,12 @@ Check that set1 and set2 have no overlapping cryo_id's
 
 ```
 
-
 ```{r}
 live_metadata <- live_metadata %>% left_join(set2)
 ```
 
 ## Add Sst2 to live_metadata
+
 ```{r}
 live_metadata <- natural_join(live_metadata, extr2,
                               by = c('cryo_id', 
@@ -218,5 +261,3 @@ live_metadata <- natural_join(live_metadata, extr2,
                                      'cull_notes'), 
                               jointype = 'FULL')
 ```
-
-
