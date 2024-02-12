@@ -1,0 +1,260 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s23">
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font x:Family="Swiss" ss:Bold="1"/>
+   <Interior ss:Color="#DCDCFF" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="s24">
+    <Font x:Family="Swiss" ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="s25">
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font x:Family="Swiss" ss:Bold="1"/>
+   <Interior ss:Color="#DCDCFF" ss:Pattern="Solid"/>
+   <NumberFormat ss:Format="hh:mm:ss.0"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Sheet1">
+  <Table>
+  <Column ss:Index="1" ss:AutoFitWidth="0" ss:Width="120.0"/>
+  <Column ss:Index="2" ss:AutoFitWidth="0" ss:Width="120.0"/>
+  <Column ss:Index="3" ss:AutoFitWidth="0" ss:Width="120.0"/>
+  <Column ss:Index="4" ss:AutoFitWidth="0" ss:Width="120.0"/>
+  <Column ss:Index="5" ss:AutoFitWidth="0" ss:Width="120.0"/>
+  <Column ss:Index="6" ss:AutoFitWidth="0" ss:Width="120.0"/>
+  <Column ss:Index="7" ss:AutoFitWidth="0" ss:Width="120.0"/>
+  <Column ss:Index="8" ss:AutoFitWidth="0" ss:Width="120.0"/>
+  <Column ss:Index="9" ss:AutoFitWidth="0" ss:Width="120.0"/>
+  <Column ss:Index="10" ss:AutoFitWidth="0" ss:Width="120.0"/>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s23"><Data ss:Type="String">#</Data></Cell>
+    <Cell ss:StyleID="s23"><Data ss:Type="String">Sample ID</Data></Cell>
+    <Cell ss:StyleID="s23"><Data ss:Type="String">Date and Time</Data></Cell>
+    <Cell ss:StyleID="s23"><Data ss:Type="String">Nucleic Acid</Data></Cell>
+    <Cell ss:StyleID="s23"><Data ss:Type="String">Unit</Data></Cell>
+    <Cell ss:StyleID="s23"><Data ss:Type="String">A260 (Abs)</Data></Cell>
+    <Cell ss:StyleID="s23"><Data ss:Type="String">A280 (Abs)</Data></Cell>
+    <Cell ss:StyleID="s23"><Data ss:Type="String">260/280</Data></Cell>
+    <Cell ss:StyleID="s23"><Data ss:Type="String">260/230</Data></Cell>
+    <Cell ss:StyleID="s23"><Data ss:Type="String">Sample Type</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="Number">1</Data></Cell>
+    <Cell><Data ss:Type="String">blank</Data></Cell>
+    <Cell><Data ss:Type="String">9/6/2023 3:40:55 PM</Data></Cell>
+    <Cell><Data ss:Type="Number">-19.2</Data></Cell>
+    <Cell><Data ss:Type="String">ng/µl</Data></Cell>
+    <Cell><Data ss:Type="Number">-0.481</Data></Cell>
+    <Cell><Data ss:Type="Number">-0.275</Data></Cell>
+    <Cell><Data ss:Type="Number">1.75</Data></Cell>
+    <Cell><Data ss:Type="Number">1.90</Data></Cell>
+    <Cell><Data ss:Type="String">RNA</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="Number">2</Data></Cell>
+    <Cell><Data ss:Type="String">blank(Reblank)</Data></Cell>
+    <Cell><Data ss:Type="String">9/6/2023 3:42:29 PM</Data></Cell>
+    <Cell><Data ss:Type="Number">-0.1</Data></Cell>
+    <Cell><Data ss:Type="String">ng/µl</Data></Cell>
+    <Cell><Data ss:Type="Number">-0.001</Data></Cell>
+    <Cell><Data ss:Type="Number">-0.009</Data></Cell>
+    <Cell><Data ss:Type="Number">0.16</Data></Cell>
+    <Cell><Data ss:Type="Number">0.07</Data></Cell>
+    <Cell><Data ss:Type="String">RNA</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="Number">3</Data></Cell>
+    <Cell><Data ss:Type="String">blank</Data></Cell>
+    <Cell><Data ss:Type="String">9/6/2023 3:43:25 PM</Data></Cell>
+    <Cell><Data ss:Type="Number">-0.6</Data></Cell>
+    <Cell><Data ss:Type="String">ng/µl</Data></Cell>
+    <Cell><Data ss:Type="Number">-0.015</Data></Cell>
+    <Cell><Data ss:Type="Number">-0.021</Data></Cell>
+    <Cell><Data ss:Type="Number">0.72</Data></Cell>
+    <Cell><Data ss:Type="Number">27.77</Data></Cell>
+    <Cell><Data ss:Type="String">RNA</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="Number">4</Data></Cell>
+    <Cell><Data ss:Type="String">4MA2a</Data></Cell>
+    <Cell><Data ss:Type="String">9/6/2023 3:45:27 PM</Data></Cell>
+    <Cell><Data ss:Type="Number">22.1</Data></Cell>
+    <Cell><Data ss:Type="String">ng/µl</Data></Cell>
+    <Cell><Data ss:Type="Number">0.553</Data></Cell>
+    <Cell><Data ss:Type="Number">0.266</Data></Cell>
+    <Cell><Data ss:Type="Number">2.08</Data></Cell>
+    <Cell><Data ss:Type="Number">2.01</Data></Cell>
+    <Cell><Data ss:Type="String">RNA</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="Number">5</Data></Cell>
+    <Cell><Data ss:Type="String">4PH1b</Data></Cell>
+    <Cell><Data ss:Type="String">9/6/2023 3:47:09 PM</Data></Cell>
+    <Cell><Data ss:Type="Number">40.2</Data></Cell>
+    <Cell><Data ss:Type="String">ng/µl</Data></Cell>
+    <Cell><Data ss:Type="Number">1.004</Data></Cell>
+    <Cell><Data ss:Type="Number">0.604</Data></Cell>
+    <Cell><Data ss:Type="Number">1.66</Data></Cell>
+    <Cell><Data ss:Type="Number">0.80</Data></Cell>
+    <Cell><Data ss:Type="String">RNA</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="Number">6</Data></Cell>
+    <Cell><Data ss:Type="String">4PH1b</Data></Cell>
+    <Cell><Data ss:Type="String">9/6/2023 3:48:15 PM</Data></Cell>
+    <Cell><Data ss:Type="Number">20.4</Data></Cell>
+    <Cell><Data ss:Type="String">ng/µl</Data></Cell>
+    <Cell><Data ss:Type="Number">0.510</Data></Cell>
+    <Cell><Data ss:Type="Number">0.279</Data></Cell>
+    <Cell><Data ss:Type="Number">1.83</Data></Cell>
+    <Cell><Data ss:Type="Number">1.18</Data></Cell>
+    <Cell><Data ss:Type="String">RNA</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="Number">7</Data></Cell>
+    <Cell><Data ss:Type="String">1CA2a</Data></Cell>
+    <Cell><Data ss:Type="String">9/6/2023 3:49:41 PM</Data></Cell>
+    <Cell><Data ss:Type="Number">49.3</Data></Cell>
+    <Cell><Data ss:Type="String">ng/µl</Data></Cell>
+    <Cell><Data ss:Type="Number">1.234</Data></Cell>
+    <Cell><Data ss:Type="Number">0.635</Data></Cell>
+    <Cell><Data ss:Type="Number">1.94</Data></Cell>
+    <Cell><Data ss:Type="Number">2.15</Data></Cell>
+    <Cell><Data ss:Type="String">RNA</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="Number">8</Data></Cell>
+    <Cell><Data ss:Type="String">3HA2a</Data></Cell>
+    <Cell><Data ss:Type="String">9/6/2023 3:51:11 PM</Data></Cell>
+    <Cell><Data ss:Type="Number">50.4</Data></Cell>
+    <Cell><Data ss:Type="String">ng/µl</Data></Cell>
+    <Cell><Data ss:Type="Number">1.261</Data></Cell>
+    <Cell><Data ss:Type="Number">0.618</Data></Cell>
+    <Cell><Data ss:Type="Number">2.04</Data></Cell>
+    <Cell><Data ss:Type="Number">2.08</Data></Cell>
+    <Cell><Data ss:Type="String">RNA</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="Number">9</Data></Cell>
+    <Cell><Data ss:Type="String">1Ea</Data></Cell>
+    <Cell><Data ss:Type="String">9/6/2023 3:52:29 PM</Data></Cell>
+    <Cell><Data ss:Type="Number">66.3</Data></Cell>
+    <Cell><Data ss:Type="String">ng/µl</Data></Cell>
+    <Cell><Data ss:Type="Number">1.658</Data></Cell>
+    <Cell><Data ss:Type="Number">1.006</Data></Cell>
+    <Cell><Data ss:Type="Number">1.65</Data></Cell>
+    <Cell><Data ss:Type="Number">0.80</Data></Cell>
+    <Cell><Data ss:Type="String">RNA</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="Number">10</Data></Cell>
+    <Cell><Data ss:Type="String">4LA2a</Data></Cell>
+    <Cell><Data ss:Type="String">9/6/2023 3:54:21 PM</Data></Cell>
+    <Cell><Data ss:Type="Number">82.6</Data></Cell>
+    <Cell><Data ss:Type="String">ng/µl</Data></Cell>
+    <Cell><Data ss:Type="Number">2.065</Data></Cell>
+    <Cell><Data ss:Type="Number">1.052</Data></Cell>
+    <Cell><Data ss:Type="Number">1.96</Data></Cell>
+    <Cell><Data ss:Type="Number">1.42</Data></Cell>
+    <Cell><Data ss:Type="String">RNA</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="Number">11</Data></Cell>
+    <Cell><Data ss:Type="String">3MA2a</Data></Cell>
+    <Cell><Data ss:Type="String">9/6/2023 3:56:02 PM</Data></Cell>
+    <Cell><Data ss:Type="Number">99.9</Data></Cell>
+    <Cell><Data ss:Type="String">ng/µl</Data></Cell>
+    <Cell><Data ss:Type="Number">2.497</Data></Cell>
+    <Cell><Data ss:Type="Number">1.449</Data></Cell>
+    <Cell><Data ss:Type="Number">1.72</Data></Cell>
+    <Cell><Data ss:Type="Number">0.94</Data></Cell>
+    <Cell><Data ss:Type="String">RNA</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="Number">12</Data></Cell>
+    <Cell><Data ss:Type="String">3CH2a</Data></Cell>
+    <Cell><Data ss:Type="String">9/6/2023 3:57:46 PM</Data></Cell>
+    <Cell><Data ss:Type="Number">21.5</Data></Cell>
+    <Cell><Data ss:Type="String">ng/µl</Data></Cell>
+    <Cell><Data ss:Type="Number">0.538</Data></Cell>
+    <Cell><Data ss:Type="Number">0.261</Data></Cell>
+    <Cell><Data ss:Type="Number">2.06</Data></Cell>
+    <Cell><Data ss:Type="Number">2.42</Data></Cell>
+    <Cell><Data ss:Type="String">RNA</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="Number">13</Data></Cell>
+    <Cell><Data ss:Type="String">1PH1a</Data></Cell>
+    <Cell><Data ss:Type="String">9/6/2023 3:59:37 PM</Data></Cell>
+    <Cell><Data ss:Type="Number">27.4</Data></Cell>
+    <Cell><Data ss:Type="String">ng/µl</Data></Cell>
+    <Cell><Data ss:Type="Number">0.684</Data></Cell>
+    <Cell><Data ss:Type="Number">0.339</Data></Cell>
+    <Cell><Data ss:Type="Number">2.02</Data></Cell>
+    <Cell><Data ss:Type="Number">2.28</Data></Cell>
+    <Cell><Data ss:Type="String">RNA</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="Number">14</Data></Cell>
+    <Cell><Data ss:Type="String">4CH1a</Data></Cell>
+    <Cell><Data ss:Type="String">9/6/2023 4:01:15 PM</Data></Cell>
+    <Cell><Data ss:Type="Number">50.2</Data></Cell>
+    <Cell><Data ss:Type="String">ng/µl</Data></Cell>
+    <Cell><Data ss:Type="Number">1.254</Data></Cell>
+    <Cell><Data ss:Type="Number">0.720</Data></Cell>
+    <Cell><Data ss:Type="Number">1.74</Data></Cell>
+    <Cell><Data ss:Type="Number">0.98</Data></Cell>
+    <Cell><Data ss:Type="String">RNA</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="Number">15</Data></Cell>
+    <Cell><Data ss:Type="String">2CH1b</Data></Cell>
+    <Cell><Data ss:Type="String">9/6/2023 4:02:34 PM</Data></Cell>
+    <Cell><Data ss:Type="Number">26.8</Data></Cell>
+    <Cell><Data ss:Type="String">ng/µl</Data></Cell>
+    <Cell><Data ss:Type="Number">0.671</Data></Cell>
+    <Cell><Data ss:Type="Number">0.376</Data></Cell>
+    <Cell><Data ss:Type="Number">1.78</Data></Cell>
+    <Cell><Data ss:Type="Number">1.04</Data></Cell>
+    <Cell><Data ss:Type="String">RNA</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="Number">16</Data></Cell>
+    <Cell><Data ss:Type="String">1CH2a</Data></Cell>
+    <Cell><Data ss:Type="String">9/6/2023 4:04:05 PM</Data></Cell>
+    <Cell><Data ss:Type="Number">9.5</Data></Cell>
+    <Cell><Data ss:Type="String">ng/µl</Data></Cell>
+    <Cell><Data ss:Type="Number">0.239</Data></Cell>
+    <Cell><Data ss:Type="Number">0.118</Data></Cell>
+    <Cell><Data ss:Type="Number">2.03</Data></Cell>
+    <Cell><Data ss:Type="Number">1.45</Data></Cell>
+    <Cell><Data ss:Type="String">RNA</Data></Cell>
+   </Row>
+  </Table>
+ </Worksheet>
+</Workbook>

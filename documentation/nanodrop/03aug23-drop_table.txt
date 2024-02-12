@@ -1,0 +1,13 @@
+Sample ID	User ID	Date 	Time 	ng/ul 	A260 	A280 	260/280 	260/230 	Constant 	Cursor Pos.	Cursor abs.	340 raw
+1-CA2a	Default	8/3/2023	3:45 PM	63.88	1.597	0.831	1.92	1.40	40.00	230	1.141	0.011
+1-CH2a	Default	8/3/2023	3:47 PM	26.87	0.672	0.340	1.97	0.79	40.00	230	0.855	0.060
+1-PA2a	Default	8/3/2023	3:51 PM	41.26	1.031	0.498	2.07	1.15	40.00	230	0.896	0.028
+1-Ea	Default	8/3/2023	3:52 PM	44.54	1.114	0.562	1.98	1.25	40.00	230	0.890	0.023
+1-PH1a	Default	8/3/2023	3:58 PM	30.00	0.750	0.362	2.07	1.22	40.00	230	0.614	-0.010
+
+Sample  ID	Curve Type	Ref  conc	Ref Abs	Std 1 conc	Std 1 Abs.	Std 2 conc	Std 2 Abs	Std 3 conc	Std 3 Abs	Std 4 conc	Std 4 Abs	Std 5 conc	Std 5 Abs	Std 6 conc	Std 6 Abs	Std 7 conc	Std 7 Abs
+1-CA2a	Interpolation																
+1-CH2a	Interpolation																
+1-PA2a	Interpolation																
+1-Ea	Interpolation																
+1-PH1a	Interpolation																

@@ -1,0 +1,28 @@
+---
+title: "Nanodrop & Qubit QA/QC"
+author: "Sarah Tanja"
+format:
+  gfm:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load Packages
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(readr)
+library(DT)
+```
+
+## 06-SEP-2023
+
+```{r}
+# Import data 
+qbit06sepRNA <- read_csv("../documentation/qubit/QubitData_07-09-2023_09-07-10.csv")
+```
+

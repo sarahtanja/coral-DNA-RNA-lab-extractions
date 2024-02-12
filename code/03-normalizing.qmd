@@ -99,7 +99,7 @@ dilute <- function(C1, C2) {
       V2_row <- (C1[i] * V1_row) / C2
       
       # Break the loop if V1 exceeds a threshold value
-      if(V1_row > 49) {
+      if(V1_row > 25) {
         cat("Skipping row ", i, ": No valid solution found\n")
         next
       }
@@ -190,5 +190,61 @@ datatable(diluted_dna)
 Any samples that are below the optimal concentration of $20 ug/ \mu L$ will have a 0 or negative `V2_minus_V1`
 :::
 
+------------------------------------------------------------------------
 
+## 06-SEP-2023
 
+Diluting RNA samples to 25ng/uL in a 25uL volume.
+
+```{r}
+sampleID <- c("1-CA2a", "1-PA2a", "1-CH2a", "1-Ea", "1-PH1a", "1-HH2a", "2-HH2a", "1-HA2a", "3-HH2a", "3-MA2a")
+
+nanodrop <- c(42.86, 35.33, 13.93, 26.94, 27.61, 66.4, 12.3, 45.2, 29.8, 35.5)
+
+rna_dilution_06SEP23 <- data.frame(sampleID = sampleID, 
+                                   nanodrop = nanodrop)
+```
+
+```{r}
+dilution <- function(C1, V2, C2) {
+  # Use lapply to calculate V1 for each C1 value
+  V1_list <- lapply(C1, function(x) ceiling((C2 * V2) / x))
+  
+  # Calculate the difference between V2 and V1 for each C1 value
+  V2_minus_V1 <- V2 - unlist(V1_list)
+  
+  # Return a list containing both the V1 values and the differences
+  result <- list(V1 = V1_list, V2_minus_V1 = V2_minus_V1)
+  
+  # Print the results
+  for (i in seq_along(result$V1)) {
+    cat("For C1 =", C1[i], "ng/uL, V1 =", result$V1[[i]], "uL, V2 - V1 =", result$V2_minus_V1[i], "uL\n")
+  }
+  
+  # Create a dataframe with calculated values
+  result_df <- tibble(C1 = C1, V1 = unlist(V1_list), V2_minus_V1 = V2_minus_V1)
+  
+  return(result_df)
+}
+
+# Example usage:
+# C1 =  List of concentrations of the stock solution
+# V2 = Desired final volume
+# C2 = Desired final concentration
+
+```
+
+```{r}
+# Enter list of C1, values for V2 & C2, and print the results
+result <- dilution(rna_dilution_06SEP23$nanodrop, 25, 25)
+
+```
+
+```{r}
+# Add result to dataframe
+rna_dilution_06SEP23 <- rna_dilution_06SEP23 %>% 
+  mutate(sample.uL = result$V1, RNaseH2O = result$V2_minus_V1)
+
+# Save dataframe so I can print it
+write_csv(rna_dilution_06SEP23, "../output/rna_dilution_06SEP23.csv")
+```
