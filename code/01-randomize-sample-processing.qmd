@@ -6,19 +6,22 @@ output: html_document
 editor: 
   markdown: 
     wrap: 72
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Install packages
+### Install packages
 
 ```{r}
 if ("rqdatatable" %in% rownames(installed.packages()) == 'FALSE') install.packages("rqdatatable")
 ```
 
-## Include packages
+### Include packages
 
 ```{r}
 library(tidyverse)
@@ -26,7 +29,9 @@ library(readr)
 library(rqdatatable)
 ```
 
-# Sub-sample selection
+## April 10th 2023
+
+### Sub-sample selection
 
 I need to select a sub-sample of 20 from a total of 140 samples, process
 them, and send them off for sequencing to confirm that it is worthwhile
@@ -58,19 +63,19 @@ criteria:
 
 I will aim to randomize my sample processing within these bounds.
 
-# Load in extractions metadata
+### Load in extractions metadata
 
 ```{r metadata}
 extractions <- read_csv("../output/extractions_metadata.csv")
 ```
 
-# Load in experiment metadata
+### Load in experiment metadata
 
 ```{r metadata}
 metadata <- read_csv("../data/experiment_metadata.csv")
 ```
 
-# Zymo Quick DNA/RNA Miniprep Kit #1
+### Zymo Quick DNA/RNA Miniprep Kit #1
 
 set.seed makes output the same when re-run This should result in 20
 samples from the environmental group and 40 samples of each treatment
@@ -95,7 +100,10 @@ extr1 <- extr1 %>%
 
 print(extr1[ , c("cryo_id","zymo_kit_set")])
 ```
-Now we specify we want to sample 2 from each treatment group only between colony 1 and 4
+
+Now we specify we want to sample 2 from each treatment group only
+between colony 1 and 4
+
 ```{r}
 set.seed(1) 
 set1 <- metadata %>%
@@ -117,14 +125,14 @@ write_csv(set1, "../output/set1_21APR23.csv")
 ```
 
 These 10 samples are the first that we will process, and will be
-assigned zymokit_id '1', as they are the first batch of 10 samples processed.
-This batch of 10 is associated with a Zymo kit of 10 preps, but may be
-spread across multiple days of lab-work. To designate when each sample
-from the set was extracted, we decided how many samples we could process
-at a time (sometime 2 samples, sometimes more), and at the lab bench
-used a random number generator from google chrome (on our smart phones)
-to pick out which samples to process, and designated an extraction_id
-(ex1, ex2, ex3, etc.) for each.
+assigned zymokit_id '1', as they are the first batch of 10 samples
+processed. This batch of 10 is associated with a Zymo kit of 10 preps,
+but may be spread across multiple days of lab-work. To designate when
+each sample from the set was extracted, we decided how many samples we
+could process at a time (sometime 2 samples, sometimes more), and at the
+lab bench used a random number generator from google chrome (on our
+smart phones) to pick out which samples to process, and designated an
+extraction_id (ex1, ex2, ex3, etc.) for each.
 
 ## Add zymokit_id to metadata and rename it live_metadata
 
@@ -137,11 +145,11 @@ live_metadata <- metadata %>% left_join(set1)
 
 Set1 was broken up into the following extractions:
 
-## ex1 : 3-Ea, 3-CA1a
+ex1 : 3-Ea, 3-CA1a
 
-## ex2
+ex2
 
-## ex3
+ex3
 
 ex4
 
@@ -151,7 +159,7 @@ ex6
 
 ex7
 
-## Figure out how to append extraction_id to the metadata in R
+Append extraction_id to the metadata in R...
 
 ```{r}
 ex1 <- set1 %>% 
